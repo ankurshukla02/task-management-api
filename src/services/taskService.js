@@ -3,7 +3,16 @@ const responseMessage = require('../helpers/responseMessage');
 const responseCode = require('../helpers/responseCode');
 
 const create = async (user, data) => {
-  return Task.create({ ...data, createdBy: user.id });
+  // Prevent mass-assignment by whitelisting allowed fields.
+  const allowedData = {
+    title: data.title,
+    description: data.description,
+    status: data.status,
+    priority: data.priority,
+    assignedTo: data.assignedTo,
+    dueDate: data.dueDate,
+  };
+  return Task.create({ ...allowedData, createdBy: user.id });
 };
 
 const list = async (user, query) => {
@@ -64,7 +73,15 @@ const update = async (user, id, data) => {
     if (data.status) allowedData.status = data.status;
     if (data.description) allowedData.description = data.description; // Consider description as comment for users to update
   } else {
-    allowedData = { ...data };
+    // Prevent mass-assignment vulnerabilities for admins, too.
+    allowedData = {
+      title: data.title,
+      description: data.description,
+      status: data.status,
+      priority: data.priority,
+      assignedTo: data.assignedTo,
+      dueDate: data.dueDate,
+    };
   }
 
   await task.update(allowedData);

@@ -23,11 +23,13 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('PENDING', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD'),
         allowNull: false,
+        defaultValue: 'PENDING',
       },
 
       priority: {
         type: Sequelize.ENUM('LOW', 'MEDIUM', 'HIGH'),
         allowNull: false,
+        defaultValue: 'LOW',
       },
 
       assignedTo: {
