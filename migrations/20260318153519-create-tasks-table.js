@@ -22,12 +22,12 @@ module.exports = {
 
       status: {
         type: Sequelize.ENUM('PENDING', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD'),
-        allowNull: true,
+        allowNull: false,
       },
 
       priority: {
         type: Sequelize.ENUM('LOW', 'MEDIUM', 'HIGH'),
-        allowNull: true,
+        allowNull: false,
       },
 
       assignedTo: {

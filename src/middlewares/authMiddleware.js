@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 const responseHandle = require('../helpers/responseHandle');
+const responseMessage = require('../helpers/responseMessage');
+const responseCode = require('../helpers/responseCode');
 
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       return responseHandle.handleError(res, {
-        status: 401,
-        message: 'Unauthorized',
+        status: responseCode.UNAUTHORIZED,
+        message: responseMessage.UNAUTHORIZED,
       });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -15,8 +17,8 @@ module.exports = (req, res, next) => {
     next();
   } catch (err) {
     return responseHandle.handleError(res, {
-      status: 401,
-      message: 'Unauthorized',
+      status: responseCode.UNAUTHORIZED,
+      message: responseMessage.UNAUTHORIZED,
     });
   }
 };

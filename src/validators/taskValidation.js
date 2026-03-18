@@ -3,7 +3,7 @@ const { z } = require('zod');
 const createTaskSchema = z.object({
   title: z.string().min(3),
   description: z.string().optional(),
-  status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD']).optional(),
+  status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD']),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   assignedTo: z.string().uuid().optional(),
   dueDate: z.string().datetime().optional(),

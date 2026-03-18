@@ -1,16 +1,18 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const responseMessage = require('../helpers/responseMessage');
+const responseCode = require('../helpers/responseCode');
 
 const login = async ({ email, password }) => {
   // Use unscoped to include password field excluded by defaultScope
   const user = await User.unscoped().findOne({ where: { email } });
   if (!user) {
-    throw Object.assign(new Error('Invalid credentials'), { status: 401 });
+    throw Object.assign(new Error(responseMessage.INVALID_CREDENTIALS), { status: responseCode.UNAUTHORIZED });
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw Object.assign(new Error('Invalid credentials'), { status: 401 });
+    throw Object.assign(new Error(responseMessage.INVALID_CREDENTIALS), { status: responseCode.UNAUTHORIZED });
   }
   // Include role in JWT so roleMiddleware can authorize correctly
   const token = jwt.sign(

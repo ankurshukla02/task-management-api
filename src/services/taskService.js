@@ -1,4 +1,6 @@
 const { Task, User } = require('../models');
+const responseMessage = require('../helpers/responseMessage');
+const responseCode = require('../helpers/responseCode');
 
 const create = async (user, data) => {
   return Task.create({ ...data, createdBy: user.id });
@@ -44,10 +46,12 @@ const getById = async (user, id) => {
     ],
   });
   if (!task) {
-    throw Object.assign(new Error('Task not found'), { status: 404 });
+    throw Object.assign(new Error('Task not found'), {
+      status: responseCode.NOT_FOUND,
+    });
   }
   if (user.role === 'USER' && task.assignedTo !== user.id) {
-    throw Object.assign(new Error('Forbidden'), { status: 403 });
+    throw Object.assign(new Error(responseMessage.FORBIDDEN), { status: responseCode.FORBIDDEN });
   }
   return task;
 };
@@ -58,7 +62,7 @@ const update = async (user, id, data) => {
   let allowedData = {};
   if (user.role === 'USER') {
     if (data.status) allowedData.status = data.status;
-    if (data.description) allowedData.description = data.description;
+    if (data.description) allowedData.description = data.description; // Consider description as comment for users to update
   } else {
     allowedData = { ...data };
   }
@@ -71,7 +75,9 @@ const update = async (user, id, data) => {
 const remove = async (id) => {
   const task = await Task.findByPk(id);
   if (!task) {
-    throw Object.assign(new Error('Task not found'), { status: 404 });
+    throw Object.assign(new Error(responseMessage.NOT_FOUND), {
+      status: responseCode.NOT_FOUND,
+    });
   }
   return task.destroy();
 };
