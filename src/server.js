@@ -1,8 +1,8 @@
-require('dotenv').config();
+require('dotenv').config({ override: true });
 const app = require('./app');
-const db = require('../models');
+const db = require('./models');
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 8000;
 
 async function startServer() {
   try {

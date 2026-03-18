@@ -16,6 +16,7 @@ const updateTaskSchema = z.object({
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),
   assignedTo: z.string().uuid().optional(),
   dueDate: z.string().datetime().optional(),
+  comment: z.string().optional(),
 });
 
 const listTaskSchema = z.object({
@@ -29,4 +30,9 @@ const taskIdParamSchema = z.object({
   id: z.string().uuid('Task ID must be a valid UUID'),
 });
 
-module.exports = { createTaskSchema, updateTaskSchema, listTaskSchema, taskIdParamSchema };
+module.exports = {
+  createTaskSchema,
+  updateTaskSchema,
+  listTaskSchema,
+  taskIdParamSchema,
+};

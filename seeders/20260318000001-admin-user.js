@@ -16,6 +16,33 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        id: randomUUID(),
+        name: 'Admin User 1',
+        email: 'admin1@example.com',
+        password: hashedPassword,
+        role: 'ADMIN',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: randomUUID(),
+        name: 'User 1',
+        email: 'user1@example.com',
+        password: hashedPassword,
+        role: 'USER',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: randomUUID(),
+        name: 'User 2',
+        email: 'user2@example.com',
+        password: hashedPassword,
+        role: 'USER',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

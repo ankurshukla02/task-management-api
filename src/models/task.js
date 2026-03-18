@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
 
@@ -21,12 +22,14 @@ module.exports = (sequelize, DataTypes) => {
 
       status: {
         type: DataTypes.ENUM('PENDING', 'IN_PROGRESS', 'COMPLETED', 'ON_HOLD'),
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 'PENDING',
       },
 
       priority: {
         type: DataTypes.ENUM('LOW', 'MEDIUM', 'HIGH'),
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 'LOW',
       },
 
       assignedTo: {

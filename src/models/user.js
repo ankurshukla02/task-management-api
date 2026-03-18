@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -6,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
 
@@ -31,14 +33,19 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.ENUM('USER', 'ADMIN'),
         allowNull: false,
+        defaultValue: 'USER',
       },
     },
     {
       tableName: 'users',
       timestamps: true,
-
       defaultScope: {
         attributes: { exclude: ['password'] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        },
       },
     },
   );

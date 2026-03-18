@@ -8,7 +8,12 @@ const role = require('../middlewares/roleMiddleware');
 router.use(auth);
 
 // CREATE
-router.post('/', role('ADMIN'), validate(taskValidation.createTaskSchema), taskController.create);
+router.post(
+  '/',
+  role('ADMIN'),
+  validate(taskValidation.createTaskSchema),
+  taskController.create,
+);
 
 // LIST
 router.get(
@@ -25,7 +30,11 @@ router.get(
 );
 
 // UPDATE
-router.put('/:id', validate(taskValidation.updateTaskSchema), taskController.update);
+router.put(
+  '/:id',
+  validate(taskValidation.updateTaskSchema),
+  taskController.update,
+);
 
 // DELETE
 router.delete(

@@ -1,4 +1,4 @@
-const { Task, User } = require('../../models');
+const { Task, User } = require('../models');
 
 const create = async (user, data) => {
   return Task.create({ ...data, createdBy: user.id });
@@ -36,7 +36,8 @@ const list = async (user, query) => {
 };
 
 const getById = async (user, id) => {
-  const task = await Task.findByPk(id, {
+  const task = await Task.findOne({
+    where: { id },
     include: [
       { model: User, as: 'assignee', attributes: ['id', 'name', 'email'] },
       { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
@@ -54,8 +55,17 @@ const getById = async (user, id) => {
 const update = async (user, id, data) => {
   const task = await getById(user, id);
   // USER can only update status; strip everything else
-  const allowedData = user.role === 'USER' ? { status: data.status } : data;
-  return task.update(allowedData);
+  let allowedData = {};
+  if (user.role === 'USER') {
+    if (data.status) allowedData.status = data.status;
+    if (data.description) allowedData.description = data.description;
+  } else {
+    allowedData = { ...data };
+  }
+
+  await task.update(allowedData);
+
+  return task;
 };
 
 const remove = async (id) => {

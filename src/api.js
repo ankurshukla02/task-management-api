@@ -13,9 +13,7 @@ router.get('/', function (req, res) {
   );
 });
 
-
 router.use('/auth', authRoutes);
 router.use('/tasks', taskRoutes);
-
 
 module.exports = router;
