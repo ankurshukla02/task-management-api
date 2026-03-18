@@ -1,0 +1,69 @@
+const { Task, User } = require('../../models');
+
+const create = async (user, data) => {
+  return Task.create({ ...data, createdBy: user.id });
+};
+
+const list = async (user, query) => {
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  const where = {};
+  if (user.role === 'USER') {
+    where.assignedTo = user.id;
+  }
+  if (query.status) where.status = query.status;
+  if (query.priority) where.priority = query.priority;
+
+  const { count, rows } = await Task.findAndCountAll({
+    where,
+    limit,
+    offset,
+    order: [['createdAt', 'DESC']],
+    include: [
+      { model: User, as: 'assignee', attributes: ['id', 'name', 'email'] },
+      { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
+    ],
+  });
+
+  return {
+    total: count,
+    page,
+    totalPages: Math.ceil(count / limit),
+    data: rows,
+  };
+};
+
+const getById = async (user, id) => {
+  const task = await Task.findByPk(id, {
+    include: [
+      { model: User, as: 'assignee', attributes: ['id', 'name', 'email'] },
+      { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
+    ],
+  });
+  if (!task) {
+    throw Object.assign(new Error('Task not found'), { status: 404 });
+  }
+  if (user.role === 'USER' && task.assignedTo !== user.id) {
+    throw Object.assign(new Error('Forbidden'), { status: 403 });
+  }
+  return task;
+};
+
+const update = async (user, id, data) => {
+  const task = await getById(user, id);
+  // USER can only update status; strip everything else
+  const allowedData = user.role === 'USER' ? { status: data.status } : data;
+  return task.update(allowedData);
+};
+
+const remove = async (id) => {
+  const task = await Task.findByPk(id);
+  if (!task) {
+    throw Object.assign(new Error('Task not found'), { status: 404 });
+  }
+  return task.destroy();
+};
+
+module.exports = { create, list, getById, update, remove };
