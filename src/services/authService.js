@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 const responseMessage = require('../helpers/responseMessage');
 const responseCode = require('../helpers/responseCode');
 
+/**
+ * Authenticates a user and generates a JWT token.
+ * @param {Object} param 
+ * @returns {Promise<Object>}
+ */
 const login = async ({ email, password }) => {
   // Use unscoped to include password field excluded by defaultScope
   const user = await User.unscoped().findOne({ where: { email } });

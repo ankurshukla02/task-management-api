@@ -4,6 +4,7 @@ const db = require('./models');
 
 const PORT = process.env.PORT || 8000;
 
+// Start the server after ensuring DB connection is successful
 async function startServer() {
   try {
     await db.sequelize.authenticate();

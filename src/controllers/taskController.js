@@ -1,6 +1,12 @@
 const taskService = require('../services/taskService');
 const responseHandle = require('../helpers/responseHandle');
 
+/**
+ * Creates a new task.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<Object>}
+ */
 const create = async (req, res) => {
   try {
     const data = await taskService.create(req.user, req.body);
@@ -10,6 +16,12 @@ const create = async (req, res) => {
   }
 };
 
+/**
+ * Lists tasks with pagination and filtering.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<Object>}
+ */
 const list = async (req, res) => {
   try {
     const data = await taskService.list(req.user, req.query);
@@ -19,6 +31,12 @@ const list = async (req, res) => {
   }
 };
 
+/**
+ * Gets a task by ID.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<Object>}
+ */
 const getById = async (req, res) => {
   try {
     const data = await taskService.getById(req.user, req.params.id);
@@ -28,6 +46,12 @@ const getById = async (req, res) => {
   }
 };
 
+/**
+ * Updates a task by ID.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<Object>}
+ */
 const update = async (req, res) => {
   try {
     const data = await taskService.update(req.user, req.params.id, req.body);
@@ -37,6 +61,12 @@ const update = async (req, res) => {
   }
 };
 
+/**
+ * Removes a task by ID.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<void>}
+ */
 const remove = async (req, res) => {
   try {
     await taskService.remove(req.params.id);

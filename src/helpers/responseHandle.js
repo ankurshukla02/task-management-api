@@ -5,22 +5,6 @@ module.exports = {
   responseWithoutData: (res, responseCode, message = '') => {
     return res.status(responseCode).send({ result: true, message: message });
   },
-  responseWithValidationErrors: (res, responseCode, validationErrors = []) => {
-    let message = 'The given data was invalid.';
-    let path = null;
-    if (validationErrors && validationErrors.length > 0) {
-      message = validationErrors[0].msg;
-      if (validationErrors[0].path) {
-        path = validationErrors[0].path;
-      }
-    }
-    return res.status(responseCode).send({
-      result: false,
-      message,
-      path,
-      payload: null,
-    });
-  },
 
   handleError: (res, err) => {
     const statusCode = err.status || responseCode.INTERNAL_SERVER_ERROR;

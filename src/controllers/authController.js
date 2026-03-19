@@ -1,7 +1,12 @@
 const authService = require('../services/authService');
 const responseHandle = require('../helpers/responseHandle');
 
-// Controller for user authentication (login)
+/**
+ * Logs in a user and generates a JWT token.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Promise<Object>}
+ */
 const login = async (req, res) => {
   try {
     const data = await authService.login(req.body);
